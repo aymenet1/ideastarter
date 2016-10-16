@@ -1,10 +1,12 @@
 var Sequelize = require('sequelize');
+var config = require("../config.js");
 
-var sequelize = new Sequelize('ideastarter', 'root', '', {
+var sequelize = new Sequelize(config.database, config.username, config.password, {
   host: 'localhost',
   dialect: 'mysql',
-  port : 3306
+  port : config.port
 });
+
 var Utilisateur = sequelize.import(__dirname + "/utilisateur");
 var Idee = sequelize.import(__dirname + "/idee");
 var Piece = sequelize.import(__dirname + "/piece");
