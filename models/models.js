@@ -7,7 +7,7 @@ var sequelize = new Sequelize('ideastarter', 'root', 'qqdwmkf2', {
 });
 var Utilisateur = sequelize.import(__dirname + "/utilisateur");
 var Idee = sequelize.import(__dirname + "/idee");
-var Piece = sequelize.import(__dirname + "/Piece");
+var Piece = sequelize.import(__dirname + "/piece");
 
 exports.Utilisateur = Utilisateur;
 exports.Idee = Idee;
