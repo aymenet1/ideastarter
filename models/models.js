@@ -1,13 +1,14 @@
 var Sequelize = require('sequelize');
 
-var sequelize = new Sequelize('ideastarter', 'root', 'qqdwmkf2', {
+var sequelize = new Sequelize('ideastarter', 'root', '', {
   host: 'localhost',
   dialect: 'mysql',
-  port : 8889
+  port : 3306
 });
 var Utilisateur = sequelize.import(__dirname + "/utilisateur");
 var Idee = sequelize.import(__dirname + "/idee");
 var Piece = sequelize.import(__dirname + "/piece");
+var Image = sequelize.import(__dirname + "/image");
 
 exports.Utilisateur = Utilisateur;
 exports.Idee = Idee;
@@ -19,6 +20,12 @@ exports.Sync = function() {
 	  }
 	});
 	Piece.belongsTo(Idee, { 
+	  foreignKey: { 
+	    allowNull: true, 
+	    name: 'idIdee'
+	  }
+	});
+	Image.belongsTo(Idee, { 
 	  foreignKey: { 
 	    allowNull: true, 
 	    name: 'idIdee'
