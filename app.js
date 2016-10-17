@@ -6,6 +6,9 @@ var morgan      = require('morgan');
 var models = require("./models/models.js");
 var api = require("./routes/api.js");
 
+var createurideeRoute = require("./routes/createurideeRoute.js");
+var createurideePreLoginRoute = require("./routes/createurideePreLoginRoute.js");
+
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded({
     extended: true
@@ -13,9 +16,12 @@ app.use( bodyParser.urlencoded({
 app.set('view engine', 'jade');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/public'));
-
+app.use('/createuridee', express.static('public'));
 app.use(morgan('dev'));
 app.use('/api', api);
+
+app.use('/', createurideePreLoginRoute);
+app.use('/createuridee', createurideeRoute);
 
 app.get('/',function(req, res){
 	res.render("index");
