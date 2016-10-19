@@ -6,7 +6,8 @@ module.exports = function(sequelize, DataTypes) {
     nom : DataTypes.STRING,
     description : DataTypes.TEXT,
     categorie : DataTypes.STRING,
-    date_depot : DataTypes.DATE
+    date_depot : DataTypes.DATE,
+    budget : DataTypes.FLOAT
   });
   return Idee;
 }

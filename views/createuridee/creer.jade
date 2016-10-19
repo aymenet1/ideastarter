@@ -1,70 +1,48 @@
-doctype html(lang='en')
-head
-    meta(charset='utf-8')
-    |     
-    meta(http-equiv='X-UA-Compatible', content='IE=edge')
-    |     
-    meta(name='viewport', content='width=device-width, initial-scale=1')
-    |     
-    meta(name='description', content='')
-    |     
-    meta(name='author', content='')
-    |     
-    title Shop Homepage - Start Bootstrap Template
-    // Bootstrap Core CSS
-    link(href='css/bootstrap.min.css', rel='stylesheet')
-    // Custom CSS
-    link(href='css/shop-homepage.css', rel='stylesheet')
-    // HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
-    // WARNING: Respond.js doesn't work if you view the page via file://
-    //if lt IE 9
-      script(src='https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js')
-      |         
-      script(src='https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js')
-  body
-    // Navigation
-    nav.navbar.navbar-inverse.navbar-fixed-top(role='navigation')
-      .container
-        // Brand and toggle get grouped for better mobile display
-        .navbar-header
-          button.navbar-toggle(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
-            span.sr-only Toggle navigation
-            |                     
-            span.icon-bar
-            |                     
-            span.icon-bar
-            |                     
-            span.icon-bar
-          |                 
-          a.navbar-brand(href='#') Idea Starter
-        // Collect the nav links, forms, and other content for toggling
-        #bs-example-navbar-collapse-1.collapse.navbar-collapse
-          ul.nav.navbar-nav
-            li
-              a(href='#') Idees
-            //|                     
-            //li
-              //a(href='#') Services
-            //|                     
-            //li
-              //a(href='#') Contact
-        // /.navbar-collapse
-      // /.container
-    // Page Content
-    .container
-      .row
-        
-          
-    // /.container
-    .container
-      hr
-      // Footer
-      footer
-        .row
-          .col-lg-12
-            p Copyright &copy; Your Website 2014
-    // /.container
-    // jQuery
-    script(src='js/jquery.js')
-    // Bootstrap Core JavaScript
-    script(src='js/bootstrap.min.js')
+extends top
+block prepend head
+    form.form-horizontal(method='post',action='/createuridee/creer',enctype="multipart/form-data")
+      // Form Name
+      legend Déposer une nouvelle idée
+      // Text input
+      .form-group
+        label.col-md-4.control-label(for='nom') Nom:
+        .col-md-6
+          input#Nom.form-control.input-md(name='nom', type='text', placeholder='Ecrivez le nom de votre idée', required='')
+      // Textarea
+      .form-group
+        label.col-md-4.control-label(for='description') Description:
+        .col-md-4
+          textarea#description.form-control(name='description') Ecrivez la description de votre idée
+      // Select Basic
+      .form-group
+        label.col-md-4.control-label(for='categorie') Categorie:
+        .col-md-4
+          select#Categorie.form-control(name='categorie')
+            option(value='1') Option one
+            option(value='2') Option two
+      // Text input
+      .form-group
+        label.col-md-4.control-label(for='date_depot') Date de déposistion
+        .col-md-4
+          input#date_depot.form-control.input-md(name='date_depot', type='text', placeholder='date deposition', required='')
+      // Text input
+      .form-group
+        label.col-md-4.control-label(for='budget') Budget
+        .col-md-4
+          input#budget.form-control.input-md(name='budget', type='text', placeholder='Votre Budget', required='')
+      // File Button
+      .form-group
+        label.col-md-4.control-label(for='image') Images
+        .col-md-4
+          input#image.input-file(name='image', type='file')
+      // File Button
+      .form-group
+        label.col-md-4.control-label(for='piece') piecejoint
+        .col-md-4
+          input#piece.input-file(name='piece', type='file')
+      // Button (Double)
+      .form-group
+        label.col-md-4.control-label(for='submit')
+        .col-md-8
+          input.btn-success.btn.pull-right(value='Ajouter', type='submit')
+          input.btn-default.btn.pull-right(value='Annuler', type='reset')

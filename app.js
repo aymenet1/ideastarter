@@ -9,10 +9,9 @@ var api = require("./routes/api.js");
 var createurideeRoute = require("./routes/createurideeRoute.js");
 var createurideePreLoginRoute = require("./routes/createurideePreLoginRoute.js");
 
-app.use( bodyParser.json() );
-app.use( bodyParser.urlencoded({
-    extended: true
-}));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 app.set('view engine', 'jade');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/public'));
