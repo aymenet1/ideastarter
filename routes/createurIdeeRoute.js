@@ -75,6 +75,13 @@ module.exports = (function() {
     //res.render('createuridee/edit');
       });           
       });
+  createurIdeeRoute.get("/monidee",function(req,res){
+       models.Idee.findAll({where:{
+                 id:2},include:[models.Utilisateur, models.Image]}).then(function(monidee){
+                  console.log(monidee);
+        res.render('createuridee/monidee',{id:1, action:"monidee",monidee:monidee});
+      });
+     });
       
    return createurIdeeRoute;
 })();
