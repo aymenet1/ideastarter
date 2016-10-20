@@ -24,7 +24,7 @@ block prepend head
       .form-group
         label.col-md-4.control-label(for='date_depot') Date de déposistion
         .col-md-4
-          input#date_depot.form-control.input-md(name='date_depot', type='text', placeholder='date deposition', required='')
+          input#date_depot.form-control.input-md(name='date_depot', type='date', placeholder='date deposition', required='')
       // Text input
       .form-group
         label.col-md-4.control-label(for='budget') Budget
@@ -32,9 +32,9 @@ block prepend head
           input#budget.form-control.input-md(name='budget', type='text', placeholder='Votre Budget', required='')
       // File Button
       .form-group
-        label.col-md-4.control-label(for='image') Images
+        label.col-md-4.control-label(for='image_idee') Image idee
         .col-md-4
-          input#image.input-file(name='image', type='file')
+          input#image.input-file(name='image_idee', type='file')
       // File Button
       .form-group
         label.col-md-4.control-label(for='piece') piecejoint

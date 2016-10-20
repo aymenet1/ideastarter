@@ -14,6 +14,9 @@ var Image = sequelize.import(__dirname + "/image");
 
 exports.Utilisateur = Utilisateur;
 exports.Idee = Idee;
+exports.Image = Image;
+exports.Piece = Piece;
+
 exports.Sync = function() {  
 	Idee.belongsTo(Utilisateur, { 
 	  foreignKey: { 
@@ -21,17 +24,21 @@ exports.Sync = function() {
 	    name: 'idUtilisateur'
 	  }
 	});
-	Piece.belongsTo(Idee, { 
+	//idee.setUtilisateur();
+	Idee.belongsTo(Piece, { 
 	  foreignKey: { 
 	    allowNull: true, 
-	    name: 'idIdee'
+	    name: 'idPiece'
 	  }
 	});
-	Image.belongsTo(Idee, { 
+	//idee.setPiece()
+
+	Idee.belongsTo(Image, { 
 	  foreignKey: { 
 	    allowNull: true, 
-	    name: 'idIdee'
+	    name: 'idImage'
 	  }
 	});
+	//idee.setImage()
 	sequelize.sync({force: true});
 };
