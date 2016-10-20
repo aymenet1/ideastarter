@@ -11,7 +11,7 @@ var createurideePreLoginRoute = require("./routes/createurideePreLoginRoute.js")
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+app.use('/uploads',express.static(__dirname + '/uploads'));
 app.set('view engine', 'jade');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/public'));

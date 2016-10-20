@@ -40,5 +40,5 @@ exports.Sync = function() {
 	  }
 	});
 	//idee.setImage()
-	sequelize.sync({force: true});
+	sequelize.sync({force: false});
 };
