@@ -60,5 +60,21 @@ module.exports = (function() {
     res.render('createuridee/edit',{id:1, action:"idees",idees:idees});
   });
   });
+  createurIdeeRoute.post('/modifier', function (req, res) { 
+         models.Idee.updateAttributes({
+          nom: req.body.nom,
+          description: req.body.description,
+          categorie: req.body.categorie,
+          date_depot: req.body.date_depot,
+          budget:req.body.budget
+         },
+         {
+            where: {id : 1 }
+         }).then(function(editIdee){
+                  //console.log(editIdee);
+    //res.render('createuridee/edit');
+      });           
+      });
+      
    return createurIdeeRoute;
 })();
