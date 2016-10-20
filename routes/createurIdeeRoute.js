@@ -42,8 +42,15 @@ module.exports = (function() {
           		res.render('createuridee/creer',{status:"success"});
           	});
 	    });
-   
+    
           
       });
+  createurIdeeRoute.get("/mesidees",function(req,res){
+       models.Idee.findAll({where:{
+                 idUtilisateur:1},include:[models.Utilisateur, models.Image]}).then(function(mesides){
+                  console.log(mesides);
+        res.render('createuridee/idees',{idUtilisateur:1, action:"mesides",mesides:mesides});
+      });
+     });
   return createurIdeeRoute;
 })();
