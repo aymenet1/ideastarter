@@ -52,5 +52,13 @@ module.exports = (function() {
         res.render('createuridee/idees',{idUtilisateur:1, action:"mesides",mesides:mesides});
       });
      });
-  return createurIdeeRoute;
+
+  createurIdeeRoute.get("/modifier",function(req,res){
+    models.Idee.findAll({where:{
+                 id:2},include:[models.Image]}).then(function(idees){
+                  console.log(idees);
+    res.render('createuridee/edit',{id:1, action:"idees",idees:idees});
+  });
+  });
+   return createurIdeeRoute;
 })();
