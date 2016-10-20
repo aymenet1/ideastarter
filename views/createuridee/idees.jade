@@ -31,7 +31,13 @@ block prepend head
             p
               | #{idee.description}
             a.btn.btn-primary(href='#')
-              | Read More 
+              | afficher
+              i.fa.fa-angle-right
+            a.btn.btn-primary#sup(href='#')
+              | modifier
+              i.fa.fa-angle-right
+            a.btn.btn-primary#sup(href='#')
+              | supprimer
               i.fa.fa-angle-right
         // /.row
         hr
@@ -41,8 +47,8 @@ block prepend head
       .row
         ul.pager
           li.previous
-            a(href='#') ← Older
+            a(href='#') ← suiv
           li.next
-            a(href='#') Newer →
+            a(href='#') prec →
       // /.row
       append foot
