@@ -1,0 +1,140 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    title Modern Business - Start Bootstrap Template
+    // Bootstrap Core CSS
+    link(href='css/bootstrap.min.css', rel='stylesheet')
+    // Custom CSS
+    link(href='css/modern-business.css', rel='stylesheet')
+    // Custom Fonts
+    link(href='font-awesome/css/font-awesome.min.css', rel='stylesheet', type='text/css')
+    // HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
+    // WARNING: Respond.js doesn't work if you view the page via file://
+    //if lt IE 9
+      script(src='https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js')
+      script(src='https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js')
+  body
+    // Navigation
+    nav.navbar.navbar-inverse.navbar-fixed-top(role='navigation')
+      .container
+        // Brand and toggle get grouped for better mobile display
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='index.html') Start Bootstrap
+        // Collect the nav links, forms, and other content for toggling
+        #bs-example-navbar-collapse-1.collapse.navbar-collapse
+          ul.nav.navbar-nav.navbar-right
+            li
+              a(href='about.html') About
+            li
+              a(href='services.html') Services
+            li
+              a(href='contact.html') Contact
+            li.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown')
+                | Portfolio 
+                b.caret
+              ul.dropdown-menu
+                li
+                  a(href='portfolio-1-col.html') 1 Column Portfolio
+                li
+                  a(href='portfolio-2-col.html') 2 Column Portfolio
+                li
+                  a(href='portfolio-3-col.html') 3 Column Portfolio
+                li
+                  a(href='portfolio-4-col.html') 4 Column Portfolio
+                li
+                  a(href='portfolio-item.html') Single Portfolio Item
+            li.dropdown.active
+              a.dropdown-toggle(href='#', data-toggle='dropdown')
+                | Blog 
+                b.caret
+              ul.dropdown-menu
+                li
+                  a(href='blog-home-1.html') Blog Home 1
+                li.active
+                  a(href='blog-home-2.html') Blog Home 2
+                li
+                  a(href='blog-post.html') Blog Post
+            li.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown')
+                | Other Pages 
+                b.caret
+              ul.dropdown-menu
+                li
+                  a(href='full-width.html') Full Width Page
+                li
+                  a(href='sidebar.html') Sidebar Page
+                li
+                  a(href='faq.html') FAQ
+                li
+                  a(href='404.html') 404
+                li
+                  a(href='pricing.html') Pricing Table
+        // /.navbar-collapse
+      // /.container
+    // Page Content
+    .container
+      .row
+        .col-lg-12
+          h1.page-header
+            | Blog Home Two
+            small Subheading
+          ol.breadcrumb
+            li
+              a(href='index.html') Home
+            li.active Blog Home Two
+      // /.row
+      // Blog Post Row
+      for idee in mesides
+        .row
+          .col-md-1.text-center
+            p
+              i.fa.fa-camera.fa-4x
+            p #{idee.date_depot}
+          .col-md-5
+            a(href='#')
+              img.img-responsive.img-hover(src='#{idee.Image.url}', alt='')
+          .col-md-6
+            h3
+              a(href='#') #{idee.nom}
+            p
+              | by 
+              a(href='#') #{idee.Utilisateur.nom}
+            p
+              | #{idee.description}
+            a.btn.btn-primary(href='#')
+              | Read More 
+              i.fa.fa-angle-right
+        // /.row
+        hr
+      
+      
+      // Pager
+      .row
+        ul.pager
+          li.previous
+            a(href='#') ← Older
+          li.next
+            a(href='#') Newer →
+      // /.row
+      hr
+      // Footer
+      footer
+        .row
+          .col-lg-12
+            p Copyright © Your Website 2014
+    // /.container
+    // jQuery
+    script(src='js/jquery.js')
+    // Bootstrap Core JavaScript
+    script(src='js/bootstrap.min.js')
