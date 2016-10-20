@@ -18,7 +18,7 @@ block prepend head
           .col-md-1.text-center
             p
               i.fa.fa-camera.fa-4x
-            p #{idee.date_depot}
+            p #{moment(idee.date_depot).format('MM/DD/YYYY')}
           .col-md-5
             a(href='#')
               img.img-responsive.img-hover(src='/#{idee.Image.url}', alt='')

@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var morgan      = require('morgan');
 var models = require("./models/models.js");
 var api = require("./routes/api.js");
+app.locals.moment = require('moment');
 
 var createurideeRoute = require("./routes/createurideeRoute.js");
 var createurideePreLoginRoute = require("./routes/createurideePreLoginRoute.js");
