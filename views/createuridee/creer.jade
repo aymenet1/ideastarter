@@ -18,8 +18,8 @@ block prepend head
         label.col-md-4.control-label(for='categorie') Categorie:
         .col-md-4
           select#Categorie.form-control(name='categorie')
-            option(value='1') Option one
-            option(value='2') Option two
+            each category in categories
+              option(value='#{category.id}') #{category.nom}
       // Text input
       .form-group
         label.col-md-4.control-label(for='date_depot') Date de déposistion

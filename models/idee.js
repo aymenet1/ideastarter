@@ -5,7 +5,6 @@ module.exports = function(sequelize, DataTypes) {
     id: { type: Sequelize.INTEGER, autoIncrement: true ,primaryKey: true},
     nom : DataTypes.STRING,
     description : DataTypes.TEXT,
-    categorie : DataTypes.STRING,
     date_depot : DataTypes.DATE,
     budget : DataTypes.FLOAT
   });
