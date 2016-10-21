@@ -20,6 +20,7 @@ module.exports = (function() {
           idee.categorie= req.body.categorie;
           idee.date_depot= req.body.date_depot;
           idee.budget= req.body.budget;
+          idee.idUtilisateur=1;
 
           idee.save().then(function(newIdee){
 	          	// console.log(newIdee);
@@ -53,35 +54,76 @@ module.exports = (function() {
       });
      });
 
+  //suprimer idée
+  createurIdeeRoute.get("/supprimer",function(req,res){
+      models.Idee.findAll({where:{
+                 idUtilisateur:1},include:[models.Utilisateur, models.Image]}).then(function(mesides){
+                 models.Idee.destroy({where:{id:req.query.id}}).then(function(){
+                  res.render('createuridee/idees',{idUtilisateur:1, action:"mesides",mesides:mesides}); }); 
+                         
+  });
+   });
+
   createurIdeeRoute.get("/modifier",function(req,res){
-    models.Idee.findAll({where:{
-                 id:2},include:[models.Image]}).then(function(idees){
+    models.Idee.findAll({where:{id:req.query.id},include:[models.Image]}).then(function(idees){
                   console.log(idees);
-    res.render('createuridee/edit',{id:1, action:"idees",idees:idees});
+    res.render('createuridee/edit',{id:req.query.id, action:"idees",idees:idees});
   });
   });
-  createurIdeeRoute.post('/modifier', function (req, res) { 
-         models.Idee.updateAttributes({
-          nom: req.body.nom,
-          description: req.body.description,
-          categorie: req.body.categorie,
-          date_depot: req.body.date_depot,
-          budget:req.body.budget
+  //
+  createurIdeeRoute.post('/modifier',function (req, res) { 
+    console.log(req.body);
+
+    var idee= models.Idee.build();
+          idee.nom= req.body.nom;
+          idee.description= req.body.description;
+          idee.categorie= req.body.categorie;
+          idee.date_depot= req.body.date_depot;
+          idee.budget= req.body.budget;
+         models.idee.updat({
+          nom: idee.nom,
+          description: idee.description,
+          categorie: idee.categorie,
+          date_depot: idee.date_depot,
+          budget: idee.budget
          },
-         {
-            where: {id : 1 }
+         {vwhere: {id: 2}
          }).then(function(editIdee){
-                  //console.log(editIdee);
-    //res.render('createuridee/edit');
+                  console.log(editIdee);
+    //res.render('createuridee/edit'+req.query.id,{id:req.query.id, action:"idees",idees:idees});
       });           
       });
+
+
   createurIdeeRoute.get("/monidee",function(req,res){
        models.Idee.findAll({where:{
-                 id:2},include:[models.Utilisateur, models.Image]}).then(function(monidee){
+                 id:req.query.id},include:[models.Utilisateur, models.Image]}).then(function(monidee){
                   console.log(monidee);
-        res.render('createuridee/monidee',{id:1, action:"monidee",monidee:monidee});
+        res.render('createuridee/monidee',{id:req.query.id, action:"monidee",monidee:monidee});
       });
      });
-      
+
+  /*createurIdeeRoute.post('/modifier', function(req, res) {
+        models.Idee.findAll({
+            where: {
+                id: 
+            },
+            include: [models.Utilisateur, models.Image]
+        }).then(function(monidee) {
+            console.log(monidee);
+            monidee.updateAttributes({
+                nom: req.body.nom,
+                description: req.body.description,
+                date_depot: req.body.date_depot,
+                budget: req.body.budget
+            }).then(function(editIdee) {
+                //console.log(editIdee);
+                //res.render('createuridee/edit');
+                res.render('createuridee/monidee', { id: 1, action: "monidee", monidee: editIdee });
+
+            });
+        });
+    });*/
+          
    return createurIdeeRoute;
 })();
