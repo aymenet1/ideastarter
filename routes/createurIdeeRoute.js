@@ -23,8 +23,8 @@ module.exports = (function() {
         idee.budget = req.body.budget;
         models.Categorie.findById(req.body.categorie).then(function(cat) {
             idee.save().then(function(newIdee) {
-            		newIdee.setCategorie(cat);
-					fs.readFile(req.files.image_idee[0].path, function(err, data) {
+                newIdee.setCategorie(cat);
+                fs.readFile(req.files.image_idee[0].path, function(err, data) {
                     var newPath = "uploads/idee/" + req.files.image_idee[0].filename;
                     var image = models.Image.build();
                     image.titre = req.body.nom;
@@ -38,8 +38,23 @@ module.exports = (function() {
                     });
                     image.save().then(function(img) {
                         newIdee.setImage(img);
-                        models.Categorie.findAll().then(function(categories) {
-                            res.render('createuridee/creer', { categories: categories, status: "success" });
+                        fs.readFile(req.files.piece[0].path, function(err, data) {
+                            var newPath = "uploads/piecejointe/" + req.files.piece[0].filename;
+                            var piece = models.Piece.build();
+                            piece.titre = req.body.nom;
+                            piece.url = newPath;
+                            fs.writeFile(newPath, data, function(err) {
+                                if (err) throw err;
+                            });
+                            fs.unlink(req.files.piece[0].path, function() {
+                                if (err) throw err;
+                            });
+                            piece.save().then(function(p) {
+                            	newIdee.setPiece(p);
+                                models.Categorie.findAll().then(function(categories) {
+                                    res.render('createuridee/creer', { categories: categories, status: "success" });
+                                });
+                            });
                         });
                     });
                 });
