@@ -1,8 +1,10 @@
 var express = require('express');
 var models = require("../models/models.js");
 var fs = require("fs");
-var multer  = require('multer')
-var upload = multer({ dest: 'uploads/' })
+var multer  = require('multer');
+var upload = multer({ dest: 'uploads/' });
+var bodyParser = require('body-parser')
+
 
 module.exports = (function() {
   'use strict';
@@ -14,6 +16,7 @@ module.exports = (function() {
   var cpUpload = upload.fields([{ name: 'image_idee', maxCount: 1 }, { name: 'piece', maxCount: 1 }])
 
   createurIdeeRoute.post('/creer',cpUpload, function (req, res) { 
+
         var idee= models.Idee.build();
           idee.nom= req.body.nom;
           idee.description= req.body.description;
@@ -54,7 +57,7 @@ module.exports = (function() {
       });
      });
 
-  //suprimer idée
+  //supprimer idée
   createurIdeeRoute.get("/supprimer",function(req,res){
       models.Idee.findAll({where:{
                  idUtilisateur:1},include:[models.Utilisateur, models.Image]}).then(function(mesides){
@@ -70,29 +73,76 @@ module.exports = (function() {
     res.render('createuridee/edit',{id:req.query.id, action:"idees",idees:idees});
   });
   });
-  //
-  createurIdeeRoute.post('/modifier',function (req, res) { 
-    console.log(req.body);
+  //////////////////////////////////////////////////////////////////
+  createurIdeeRoute.post('/modifier',cpUpload, function (req, res) { 
 
-    var idee= models.Idee.build();
+        var idee= models.Idee.build();
           idee.nom= req.body.nom;
           idee.description= req.body.description;
           idee.categorie= req.body.categorie;
           idee.date_depot= req.body.date_depot;
           idee.budget= req.body.budget;
-         models.idee.updat({
-          nom: idee.nom,
-          description: idee.description,
-          categorie: idee.categorie,
-          date_depot: idee.date_depot,
-          budget: idee.budget
-         },
-         {vwhere: {id: 2}
-         }).then(function(editIdee){
-                  console.log(editIdee);
-    //res.render('createuridee/edit'+req.query.id,{id:req.query.id, action:"idees",idees:idees});
-      });           
+          idee.idUtilisateur=1;
+          idee.id= req.body.id;
+          idee.img=req.body.image_id;
+console.log(idee.nom);
+console.log(idee.img);
+ models.Idee.update({
+                nom: idee.nom,
+                description: idee.description,
+                date_depot: idee.date_depot,
+                budget: idee.budget
+            },
+         {where: {id:idee.id }}).then(function(editIdee) {
+          fs.readFile(req.files.image_idee[0].path, function (err, data) {
+              var newPath = "uploads/idee/"+req.files.image_idee[0].filename;
+              var image= models.Image.build();
+              image.titre = req.body.nom;
+              image.url = newPath;
+
+              fs.writeFile(newPath, data, function (err) {
+                if (err) throw err;
+              });
+              fs.unlink(req.files.image_idee[0].path, function() {
+                if (err) throw err;
+              });
+              models.Image.update({
+                titre:image.titre,
+                url:image.url},
+                {where:{id:idee.img}}).then(function(updatimg){                        
+                models.Idee.findAll({where:{
+                 id:idee.id},include:[models.Utilisateur, models.Image]}).then(function(monidee){
+                  console.log(updatimg);
+               res.render('createuridee/monidee',{id: idee.id, action:"monidee",monidee:monidee});
       });
+                  }); });
+            });
+//models.Ideed.update
+        /*  idee.update({where:{models.Image.id:idee.id}}).then(function(editidee){
+              // console.log(newIdee);
+              fs.readFile(req.files.image_idee[0].path, function (err, data) {
+              var newPath = "uploads/idee/"+req.files.image_idee[0].filename;
+              var image= models.Image.build();
+              image.titre = req.body.nom;
+              image.url = newPath;
+
+              fs.writeFile(newPath, data, function (err) {
+                if (err) throw err;
+              });
+              fs.unlink(req.files.image_idee[0].path, function() {
+                if (err) throw err;
+              });
+              image.save().then(function(img){
+                console.log("set image");
+                editidee.setImage(img);
+              });
+              res.render('createuridee/mesidees',{status:"success"});
+            });
+      });
+    */
+          
+      });
+  /////////////////////////////////////////////////////////////////
 
 
   createurIdeeRoute.get("/monidee",function(req,res){
@@ -103,23 +153,21 @@ module.exports = (function() {
       });
      });
 
-  /*createurIdeeRoute.post('/modifier', function(req, res) {
-        models.Idee.findAll({
-            where: {
-                id: 
-            },
+  /*createurIdeeRoute.post('/modifier', function(req,res) {
+        models.Idee.find({
+            where: { id: req.body.id },
             include: [models.Utilisateur, models.Image]
         }).then(function(monidee) {
-            console.log(monidee);
-            monidee.updateAttributes({
+           // console.log(monidee);
+            monidee.save({
                 nom: req.body.nom,
                 description: req.body.description,
                 date_depot: req.body.date_depot,
                 budget: req.body.budget
             }).then(function(editIdee) {
-                //console.log(editIdee);
+                console.log(editIdee);
                 //res.render('createuridee/edit');
-                res.render('createuridee/monidee', { id: 1, action: "monidee", monidee: editIdee });
+                //res.render('createuridee/mesides', { id: 1, action: "monidee", monidee: monidee });
 
             });
         });
