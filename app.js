@@ -17,6 +17,9 @@ app.set('view engine', 'jade');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/public'));
 app.use('/createuridee', express.static('public'));
+app.use('/createuridee/chercher/', express.static('public'));
+app.use('/createuridee/chercher/categorie', express.static('public'));
+
 app.use(morgan('dev'));
 app.use('/api', api);
 

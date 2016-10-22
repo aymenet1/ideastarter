@@ -1,4 +1,4 @@
-extends top
+extends layout
 block prepend head
     form.form-horizontal(method='post',action='/createuridee/creer',enctype="multipart/form-data")
       // Form Name
@@ -18,8 +18,8 @@ block prepend head
         label.col-md-4.control-label(for='categorie') Categorie:
         .col-md-4
           select#Categorie.form-control(name='categorie')
-            each category in categories
-              option(value='#{category.id}') #{category.nom}
+            each categorie in categories
+              option(value='#{categorie.id}') #{categorie.nom}
       // Text input
       .form-group
         label.col-md-4.control-label(for='date_depot') Date de déposistion
@@ -46,3 +46,6 @@ block prepend head
         .col-md-8
           input.btn-success.btn.pull-right(value='Ajouter', type='submit')
           input.btn-default.btn.pull-right(value='Annuler', type='reset')
+    append foot
+      script.
+        tinymce.init({ selector:'textarea' });

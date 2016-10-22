@@ -50,7 +50,7 @@ module.exports = (function() {
                                 if (err) throw err;
                             });
                             piece.save().then(function(p) {
-                            	newIdee.setPiece(p);
+                                newIdee.setPiece(p);
                                 models.Categorie.findAll().then(function(categories) {
                                     res.render('createuridee/creer', { categories: categories, status: "success" });
                                 });
@@ -115,6 +115,22 @@ module.exports = (function() {
         }).then(function(monidee) {
             console.log(monidee);
             res.render('createuridee/monidee', { id: 1, action: "monidee", monidee: monidee });
+        });
+    });
+    createurIdeeRoute.get("/chercher/categorie/:idCategorie", function(req, res) {
+        models.Categorie.findById(req.params.idCategorie).then(function(cat) {
+            cat.getIdees({include:[models.Image,models.Utilisateur]}).then(function(idees) {
+                models.Categorie.findAll().then(function(categories) {
+                    res.render('createuridee/chercher', { categories: categories, categorie: cat, idees: idees });
+
+                });
+            });
+
+        });
+    });
+    createurIdeeRoute.get("/chercher", function(req, res) {
+        models.Categorie.findAll().then(function(categories) {
+            res.render('createuridee/chercher', { categories: categories });
         });
     });
 
