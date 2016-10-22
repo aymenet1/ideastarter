@@ -1,4 +1,4 @@
-extends top
+extends layout
 block prepend head
     // Page Content
     .container
@@ -36,7 +36,7 @@ block prepend head
             a.btn.btn-primary#modif(href='/createuridee/modifier?id=#{idee.id}')
               | modifier
               i.fa.fa-angle-right
-            a.btn.btn-primary#sup(href='/createuridee/supprimer?id=#{idee.id}')
+            a.btn.btn-primary#sup(href='javascript:confirmDelete("/createuridee/supprimer?id=#{idee.id}")')
               | supprimer
               i.fa.fa-angle-right
         // /.row
@@ -52,3 +52,9 @@ block prepend head
             a(href='#') prec →
       // /.row
       append foot
+      script.
+        function confirmDelete(delUrl) {
+         if (confirm("Are you sure you want to delete")) {
+          document.location = delUrl;
+          }
+        }

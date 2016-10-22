@@ -10,45 +10,61 @@ module.exports = (function() {
   'use strict';
   var createurIdeeRoute = express.Router(); 
   createurIdeeRoute.get("/creer",function(req,res){
-  	res.render('createuridee/creer');
+     models.Categorie.findAll().then(function(categories) {
+   res.render('createuridee/creer', { categories: categories, status: "success" });
+                         
   });
+     });
 
   var cpUpload = upload.fields([{ name: 'image_idee', maxCount: 1 }, { name: 'piece', maxCount: 1 }])
 
-  createurIdeeRoute.post('/creer',cpUpload, function (req, res) { 
+  createurIdeeRoute.post('/creer', cpUpload, function(req, res) {
+        var idee = models.Idee.build();
+        idee.nom = req.body.nom;
+        idee.description = req.body.description;
+        idee.date_depot = req.body.date_depot;
+        idee.budget = req.body.budget;
+        models.Categorie.findById(req.body.categorie).then(function(cat) {
+            idee.save().then(function(newIdee) {
+                newIdee.setCategorie(cat);
+                fs.readFile(req.files.image_idee[0].path, function(err, data) {
+                    var newPath = "uploads/idee/" + req.files.image_idee[0].filename;
+                    var image = models.Image.build();
+                    image.titre = req.body.nom;
+                    image.url = newPath;
 
-        var idee= models.Idee.build();
-          idee.nom= req.body.nom;
-          idee.description= req.body.description;
-          idee.categorie= req.body.categorie;
-          idee.date_depot= req.body.date_depot;
-          idee.budget= req.body.budget;
-          idee.idUtilisateur=1;
+                    fs.writeFile(newPath, data, function(err) {
+                        if (err) throw err;
+                    });
+                    fs.unlink(req.files.image_idee[0].path, function() {
+                        if (err) throw err;
+                    });
+                    image.save().then(function(img) {
+                        newIdee.setImage(img);
+                        fs.readFile(req.files.piece[0].path, function(err, data) {
+                            var newPath = "uploads/piecejointe/" + req.files.piece[0].filename;
+                            var piece = models.Piece.build();
+                            piece.titre = req.body.nom;
+                            piece.url = newPath;
+                            fs.writeFile(newPath, data, function(err) {
+                                if (err) throw err;
+                            });
+                            fs.unlink(req.files.piece[0].path, function() {
+                                if (err) throw err;
+                            });
+                            piece.save().then(function(p) {
+                                newIdee.setPiece(p);
+                                models.Categorie.findAll().then(function(categories) {
+                                    res.render('createuridee/creer', { categories: categories, status: "success" });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        })
+    });
 
-          idee.save().then(function(newIdee){
-	          	// console.log(newIdee);
-	          	fs.readFile(req.files.image_idee[0].path, function (err, data) {
-	            var newPath = "uploads/idee/"+req.files.image_idee[0].filename;
-	            var image= models.Image.build();
-	            image.titre = req.body.nom;
-	            image.url = newPath;
-
-	            fs.writeFile(newPath, data, function (err) {
-	              if (err) throw err;
-	            });
-	            fs.unlink(req.files.image_idee[0].path, function() {
-	              if (err) throw err;
-	            });
-          		image.save().then(function(img){
-          			console.log("set image");
-            		newIdee.setImage(img);
-            	});
-          		res.render('createuridee/creer',{status:"success"});
-          	});
-	    });
-    
-          
-      });
   createurIdeeRoute.get("/mesidees",function(req,res){
        models.Idee.findAll({where:{
                  idUtilisateur:1},include:[models.Utilisateur, models.Image]}).then(function(mesides){
@@ -117,61 +133,31 @@ console.log(idee.img);
       });
                   }); });
             });
-//models.Ideed.update
-        /*  idee.update({where:{models.Image.id:idee.id}}).then(function(editidee){
-              // console.log(newIdee);
-              fs.readFile(req.files.image_idee[0].path, function (err, data) {
-              var newPath = "uploads/idee/"+req.files.image_idee[0].filename;
-              var image= models.Image.build();
-              image.titre = req.body.nom;
-              image.url = newPath;
+      });
+  createurIdeeRoute.get("/chercher/categorie/:idCategorie", function(req, res) {
+        models.Categorie.findById(req.params.idCategorie).then(function(cat) {
+            cat.getIdees({include:[models.Image,models.Utilisateur]}).then(function(idees) {
+                models.Categorie.findAll().then(function(categories) {
+                    res.render('createuridee/chercher', { categories: categories, categorie: cat, idees: idees });
 
-              fs.writeFile(newPath, data, function (err) {
-                if (err) throw err;
-              });
-              fs.unlink(req.files.image_idee[0].path, function() {
-                if (err) throw err;
-              });
-              image.save().then(function(img){
-                console.log("set image");
-                editidee.setImage(img);
-              });
-              res.render('createuridee/mesidees',{status:"success"});
+                });
             });
-      });
-    */
-          
-      });
-  /////////////////////////////////////////////////////////////////
 
+        });
+    });
+    createurIdeeRoute.get("/chercher", function(req, res) {
+        models.Categorie.findAll().then(function(categories) {
+            res.render('createuridee/chercher', { categories: categories });
+        });
+    });
 
   createurIdeeRoute.get("/monidee",function(req,res){
        models.Idee.findAll({where:{
-                 id:req.query.id},include:[models.Utilisateur, models.Image]}).then(function(monidee){
+                 id:req.query.id},include:[models.Utilisateur, models.Image,models.Piece,models.Categorie]}).then(function(monidee){
                   console.log(monidee);
         res.render('createuridee/monidee',{id:req.query.id, action:"monidee",monidee:monidee});
       });
      });
-
-  /*createurIdeeRoute.post('/modifier', function(req,res) {
-        models.Idee.find({
-            where: { id: req.body.id },
-            include: [models.Utilisateur, models.Image]
-        }).then(function(monidee) {
-           // console.log(monidee);
-            monidee.save({
-                nom: req.body.nom,
-                description: req.body.description,
-                date_depot: req.body.date_depot,
-                budget: req.body.budget
-            }).then(function(editIdee) {
-                console.log(editIdee);
-                //res.render('createuridee/edit');
-                //res.render('createuridee/mesides', { id: 1, action: "monidee", monidee: monidee });
-
-            });
-        });
-    });*/
           
    return createurIdeeRoute;
 })();
