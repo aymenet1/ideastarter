@@ -117,6 +117,7 @@ module.exports = (function() {
             res.render('createuridee/monidee', { id: 1, action: "monidee", monidee: monidee });
         });
     });
+    
     createurIdeeRoute.get("/chercher/categorie/:idCategorie", function(req, res) {
         models.Categorie.findById(req.params.idCategorie).then(function(cat) {
             cat.getIdees({include:[models.Image,models.Utilisateur]}).then(function(idees) {
@@ -128,6 +129,36 @@ module.exports = (function() {
 
         });
     });
+
+    createurIdeeRoute.post("/chercher", function(req,res){
+        if(typeof(req.body.idCategorie)=="undefined"){
+            models.Idee.findAll({
+                where:{
+                    nom: {$like:'%'+req.body.nom+'%'} 
+                },
+                include:[models.Image,models.Utilisateur]
+            }).then(function(idees){
+                models.Categorie.findAll().then(function(categories) {
+                    res.render('createuridee/chercher', { categories: categories,idees:idees });
+                });
+            })
+        }else{
+             models.Idee.findAll({
+                where:{
+                    nom: {$like:'%'+req.body.nom+'%'},
+                    idCategorie:req.body.idCategorie
+                },
+                include:[models.Image,models.Utilisateur]
+            }).then(function(idees){
+                models.Categorie.findAll().then(function(categories) {
+                    models.Categorie.findById(req.body.idCategorie).then(function(cat) {
+                        res.render('createuridee/chercher', { categories: categories,idees:idees, categorie: cat });
+                    });
+                });
+            })
+        }
+    })
+
     createurIdeeRoute.get("/chercher", function(req, res) {
         models.Categorie.findAll().then(function(categories) {
             res.render('createuridee/chercher', { categories: categories });

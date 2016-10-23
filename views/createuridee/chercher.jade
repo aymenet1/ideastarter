@@ -37,11 +37,13 @@ block prepend head
       // Blog Search Well
       .well
         h4 Chercher une idee
-        .input-group
-          input.form-control(type='text')
+        form.input-group(action="/createuridee/chercher", method="post")
+          input.form-control(type='text', name="nom")
+          -if(categorie){
+            input(type="hidden", name="idCategorie" , value="#{categorie.id}")
+          -}
           span.input-group-btn
-            button.btn.btn-default(type='button')
-              span.glyphicon.glyphicon-search
+            input.btn.btn-default(type='submit' value="Chercher")
         // /.input-group
       // Blog Categories Well
       .well
