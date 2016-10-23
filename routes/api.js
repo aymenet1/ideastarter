@@ -3,6 +3,7 @@ var models = require("../models/models.js");
 var multer = require("multer");
 var upload = multer({ dest: './uploads' });
 var fs = require("fs");
+var bodyParser = require('body-parser');
 var Sequelize = require('sequelize');
 var _ = require('lodash');
 module.exports = (function() {
