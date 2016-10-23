@@ -5,7 +5,6 @@ var multer  = require('multer');
 var upload = multer({ dest: 'uploads/' });
 var bodyParser = require('body-parser')
 
-
 module.exports = (function() {
   'use strict';
   var createurIdeeRoute = express.Router(); 
@@ -72,7 +71,28 @@ module.exports = (function() {
         res.render('createuridee/idees',{idUtilisateur:1, action:"mesides",mesides:mesides});
       });
      });
+  createurIdeeRoute.get("/idees",function(req,res){
+       models.Idee.findAll({include:[models.Utilisateur, models.Image]}).then(function(idees){
+                  console.log(idees);
+        res.render('createuridee/aidees',{action:"idees",idees:idees});
+      });
+     });
+  createurIdeeRoute.get("/idee",function(req,res){
+       models.Idee.findAll({where:{
+                 id:req.query.id},include:[models.Utilisateur, models.Image,models.Piece,models.Categorie]}).then(function(idee){
+                  //console.log(idee);
+                  models.Commentaire.findAll({where:{
+                 idIdee:req.query.id,idCommentaire:null},include:[models.Utilisateur]}).then(function(coments){
+              models.Commentaire.findAll({where:{
+                 idIdee:req.query.id,idCommentaire:{$ne:null}},include:[models.Utilisateur]}).then(function(repcoments){
+                  
+console.log(repcoments);
 
+      });});
+
+        res.render('createuridee/showidee',{id:req.query.id, action:"idee",idee:idee,coments:coments});
+      });
+     });
   //supprimer idée
   createurIdeeRoute.get("/supprimer",function(req,res){
       models.Idee.findAll({where:{
@@ -152,12 +172,62 @@ console.log(idee.img);
     });
 
   createurIdeeRoute.get("/monidee",function(req,res){
-       models.Idee.findAll({where:{
-                 id:req.query.id},include:[models.Utilisateur, models.Image,models.Piece,models.Categorie]}).then(function(monidee){
-                  console.log(monidee);
-        res.render('createuridee/monidee',{id:req.query.id, action:"monidee",monidee:monidee});
-      });
+       models.Idee.findAll({where:{id:req.query.id},
+                           include:[models.Utilisateur,
+                                    models.Image,
+                                    models.Piece,
+                                    models.Categorie]}).then(function(monidee){
+                  //console.log(monidee);
+                   models.Commentaire.findAll({where:{
+                  idIdee:req.query.id,idCommentaire:null},include:[models.Utilisateur,models.Idee]}).then(function(comments){
+                       models.Commentaire.findAll({where:{
+                 idCommentaire:comments.id,idCommentaire:{$ne:null}},include:[models.Utilisateur]}).then(function(repcomments){            
+        res.render('createuridee/monidee',{id:req.query.id, action:"monidee",monidee:monidee,comments:comments,repcomments:repcomments});
+      });});});
      });
-          
+        
+         createurIdeeRoute.post('/commentid', function (req, res) { 
+           var com = models.Commentaire.build();
+              com.message=req.body.comment;
+          // var idt=req.body.idee;
+             var idIdee=req.query.idee;
+            // var idee= models.Idee.findAll({where:{id:idIdee}});
+          console.log(idIdee);
+               com.save().then(function(newcomment) {
+                newcomment.setIdee(idIdee);
+                newcomment.setUtilisateur(1);    
+                models.Idee.findAll({where:{
+                 id:idIdee},include:[models.Utilisateur, 
+                                          models.Image,
+                                          models.Piece,
+                                          models.Categorie]}).then(function(idee){
+                  console.log(idee);
+        res.render('createuridee/showidee',{id:req.query.id, action:"idee",idee:idee});
+      });         
+                });
+             });
+
+createurIdeeRoute.post('/repcomment', function (req, res) { 
+           var com = models.Commentaire.build();
+              com.message=req.body.comment;
+          // var idt=req.body.idee;
+             var idIdee=req.query.idee;
+             var idc=req.query.idc;
+            // var idee= models.Idee.findAll({where:{id:idIdee}});
+          console.log(idc);
+               com.save().then(function(newcomment) {
+                newcomment.setIdee(idIdee);
+                newcomment.setUtilisateur(1); 
+                newcomment.setCommentaire(idc);  
+                models.Idee.findAll({where:{
+                 id:idIdee},include:[models.Utilisateur, 
+                                          models.Image,
+                                          models.Piece,
+                                          models.Categorie]}).then(function(idee){
+                  console.log(idee);
+        res.render('createuridee/showidee',{id:req.query.id, action:"idee",idee:idee});
+      });         
+                });
+             });
    return createurIdeeRoute;
 })();
