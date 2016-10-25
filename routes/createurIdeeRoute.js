@@ -82,17 +82,17 @@ module.exports = (function() {
                  id:req.query.id},include:[models.Utilisateur, models.Image,models.Piece,models.Categorie]}).then(function(idee){
                   //console.log(idee);
                   models.Commentaire.findAll({where:{
-                 idIdee:req.query.id,idCommentaire:null},include:[models.Utilisateur]}).then(function(coments){
+                 idIdee:req.query.id},include:[models.Utilisateur]}).then(function(comments){
               models.Commentaire.findAll({where:{
-                 idIdee:req.query.id,idCommentaire:{$ne:null}},include:[models.Utilisateur]}).then(function(repcoments){
-                  
-console.log(repcoments);
+                 idIdee:req.query.id},include:[models.Utilisateur]}).then(function(repcoments){
+                  models.RepCommentaire.findAll({where:{
+                 idIdee:req.query.id},include:[models.Utilisateur]}).then(function(repcomments){  
+     
 
-      });});
-
-        res.render('createuridee/showidee',{id:req.query.id, action:"idee",idee:idee,coments:coments});
+        res.render('createuridee/showidee',{id:req.query.id, action:"idee",idee:idee,comments:comments,repcomments:repcomments});
       });
      });
+     });});});
   //supprimer idée
   createurIdeeRoute.get("/supprimer",function(req,res){
       models.Idee.findAll({where:{
@@ -179,9 +179,9 @@ console.log(idee.img);
                                     models.Categorie]}).then(function(monidee){
                   //console.log(monidee);
                    models.Commentaire.findAll({where:{
-                  idIdee:req.query.id,idCommentaire:null},include:[models.Utilisateur,models.Idee]}).then(function(comments){
-                       models.Commentaire.findAll({where:{
-                 idCommentaire:comments.id,idCommentaire:{$ne:null}},include:[models.Utilisateur]}).then(function(repcomments){            
+                  idIdee:req.query.id},include:[models.Utilisateur,models.Idee]}).then(function(comments){
+                     models.RepCommentaire.findAll({where:{
+                 idIdee:req.query.id},include:[models.Utilisateur]}).then(function(repcomments){            
         res.render('createuridee/monidee',{id:req.query.id, action:"monidee",monidee:monidee,comments:comments,repcomments:repcomments});
       });});});
      });
@@ -201,14 +201,19 @@ console.log(idee.img);
                                           models.Image,
                                           models.Piece,
                                           models.Categorie]}).then(function(idee){
-                  console.log(idee);
-        res.render('createuridee/showidee',{id:req.query.id, action:"idee",idee:idee});
+                          models.Commentaire.findAll({where:{
+                  idIdee:req.query.idee},include:[models.Utilisateur,models.Idee]}).then(function(comments){
+                     models.RepCommentaire.findAll({where:{
+                 idIdee:req.query.idee},include:[models.Utilisateur]}).then(function(repcomments){ 
+        res.render('createuridee/showidee',{idee:req.query.id, action:"idee",idee:idee,comments:comments,repcomments:repcomments});
+      });         
+                });
       });         
                 });
              });
 
 createurIdeeRoute.post('/repcomment', function (req, res) { 
-           var com = models.Commentaire.build();
+           var com = models.RepCommentaire.build();
               com.message=req.body.comment;
           // var idt=req.body.idee;
              var idIdee=req.query.idee;
@@ -224,10 +229,14 @@ createurIdeeRoute.post('/repcomment', function (req, res) {
                                           models.Image,
                                           models.Piece,
                                           models.Categorie]}).then(function(idee){
-                  console.log(idee);
-        res.render('createuridee/showidee',{id:req.query.id, action:"idee",idee:idee});
+               models.Commentaire.findAll({where:{
+                  idIdee:req.query.idee},include:[models.Utilisateur,models.Idee]}).then(function(comments){
+                     models.RepCommentaire.findAll({where:{
+                 idIdee:req.query.idee},include:[models.Utilisateur,models.Idee]}).then(function(repcomments){ 
+        res.render('createuridee/showidee',{idee:req.query.id, action:"idee",idee:idee,comments:comments,repcomments:repcomments});
       });         
                 });
+             });    });
              });
    return createurIdeeRoute;
 })();
