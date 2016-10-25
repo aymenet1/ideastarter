@@ -1,0 +1,73 @@
+extends layout
+block prepend head
+    // Blog Entries Column
+    .col-md-8
+      -if (typeof(idees)!== 'undefined'){
+        h1.page-header
+          | Le resultat de recherche
+          small #{idees.length} idees
+        // First Blog Post
+        // Third Blog Post
+        each idee in idees
+          h2
+            a(href='#') #{idee.nom}
+          p.lead
+            | par 
+            a(href='index.php') #{idee.Utilisateur.prenom} #{idee.Utilisateur.nom}
+          p
+            span.glyphicon.glyphicon-time
+            |  ajout&eacute; le #{moment(idee.date_depot).format('MM/DD/YYYY')}
+          hr
+          img.img-responsive.img-hover(src='/#{idee.Image.url}', alt='')
+          hr
+          p #{idee.description}
+          a.btn.btn-primary(href='#')
+            | Details
+            span.glyphicon.glyphicon-chevron-right
+          hr
+          // Pager
+      ul.pager
+        li.previous
+          a(href='#') ← Precedent
+        li.next
+          a(href='#') Suivant →
+    -}
+    // Blog Sidebar Widgets Column
+    .col-md-4
+      // Blog Search Well
+      .well
+        h4 Chercher une idee
+        .input-group
+          input.form-control(type='text')
+          span.input-group-btn
+            button.btn.btn-default(type='button')
+              span.glyphicon.glyphicon-search
+        // /.input-group
+      // Blog Categories Well
+      .well
+        h4 Categories Idees
+        .row
+          .col-lg-6
+            ul.list-unstyled
+            each categorie in categories
+              li
+                a(href='/createuridee/chercher/categorie/#{categorie.id}') #{categorie.nom}
+          //- // /.col-lg-6
+          //- .col-lg-6
+          //-   ul.list-unstyled
+          //-     li
+          //-       a(href='#') Category Name
+          //-     li
+          //-       a(href='#') Category Name
+          //-     li
+          //-       a(href='#') Category Name
+          //-     li
+          //-       a(href='#') Category Name
+          // /.col-lg-6
+        // /.row
+      // Side Widget Well
+      -if (typeof(categorie) !== 'undefined'){
+        .well
+          h4 #{categorie.nom}
+          p #{categorie.description}
+      -}
