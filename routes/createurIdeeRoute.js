@@ -21,7 +21,20 @@ module.exports = (function() {
         idee.description = req.body.description;
         idee.date_depot = req.body.date_depot;
         idee.budget = req.body.budget;
-        models.Categorie.findById(req.body.categorie).then(function(cat) {
+        if (req.body.categorie == 0) {
+            var categorie = models.Categorie.build();
+            categorie.nom = req.body.autre_categorie;
+            categorie.valide = false;
+            categorie.save().then(function(cat) {
+                ajouter_idee(cat);
+            });
+        } else {
+            models.Categorie.findById(req.body.categorie).then(function(cat) {
+                ajouter_idee(cat);
+            });
+        }
+
+        function ajouter_idee(cat) {
             idee.save().then(function(newIdee) {
                 newIdee.setCategorie(cat);
                 fs.readFile(req.files.image_idee[0].path, function(err, data) {
@@ -59,7 +72,8 @@ module.exports = (function() {
                     });
                 });
             });
-        })
+        }
+
     });
 
     createurIdeeRoute.get("/mesidees", function(req, res) {

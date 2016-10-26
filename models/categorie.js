@@ -4,7 +4,8 @@ module.exports = function(sequelize, DataTypes) {
     var Categorie = sequelize.define("Categorie", {
         id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
         nom: DataTypes.STRING,
-        description: DataTypes.TEXT
+        description: DataTypes.TEXT,
+        valide: DataTypes.BOOLEAN
     });
     return Categorie;
 }
