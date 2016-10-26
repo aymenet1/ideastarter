@@ -1,0 +1,6 @@
+extends layout
+block prepend head
+  h3
+    | Votre idée   
+    a(href='/createuridee/monidee?id=#{idee.id}') #{idee.nom}  
+    á été bien ajouté

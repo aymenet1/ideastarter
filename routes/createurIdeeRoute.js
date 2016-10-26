@@ -65,7 +65,7 @@ module.exports = (function() {
                             piece.save().then(function(p) {
                                 newIdee.setPiece(p);
                                 models.Categorie.findAll().then(function(categories) {
-                                    res.render('createuridee/creer', { categories: categories, status: "success" });
+                                    res.render('createuridee/confirmation_idee', { idee: newIdee });
                                 });
                             });
                         });

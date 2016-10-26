@@ -1,0 +1,6 @@
+module.exports = {
+	database : "ideastarter",
+	username : "root",
+	password : "qqdwmkf2",
+	port : "8889"
+};
