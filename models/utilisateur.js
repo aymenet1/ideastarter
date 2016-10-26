@@ -7,6 +7,8 @@ module.exports = function(sequelize, DataTypes) {
     prenom : DataTypes.STRING,
     type : DataTypes.ENUM('createur', 'contributeur','admin'),
     email : DataTypes.STRING,
+    username : DataTypes.STRING,
+    password:DataTypes.STRING,
     domaine : DataTypes.STRING,
     entreprise : DataTypes.STRING,
     date_creation : DataTypes.DATE,
