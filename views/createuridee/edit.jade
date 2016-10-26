@@ -1,0 +1,54 @@
+extends layout
+block prepend head
+ for idee in idees
+     form.form-horizontal(method='post',action='/createuridee/modifier',enctype="multipart/form-data")
+       // Form Name
+       legend Modifier une idée
+       // Text input
+       .form-group
+         label.col-md-4.control-label(for='nom') Nom:
+         .col-md-6
+           input#Nom.form-control.input-md(name='nom', value="#{idee.nom}" type='text', placeholder='Ecrivez le nom de votre idée', required='')
+       // Textarea
+       .form-group
+         label.col-md-4.control-label(for='description') Description:
+         .col-md-4
+           textarea#description.form-control(name='description') #{idee.description}
+       // Select Basic
+       .form-group
+         label.col-md-4.control-label(for='categorie') Categorie:
+         .col-md-4
+           select#Categorie.form-control(name='categorie')
+             option(value='1') Option one
+             option(value='2') Option two
+             option(value='#{idee.categorie}' selected) #{idee.categorie}
+       // Text input
+       .form-group
+         label.col-md-4.control-label(for='date_depot') Date de déposistion
+         span #{moment(idee.date_depot).format('MM/DD/YYYY')}
+         .col-md-4
+           input#date_depot.form-control.input-md(name='date_depot', type='date', value="#{moment(idee.date_depot).format('DD/MM/YYYY')}" required='')
+       // Text input
+       .form-group
+         label.col-md-4.control-label(for='budget') Budget
+         .col-md-4
+           input#budget.form-control.input-md(name='budget', type='number',value="#{idee.budget}" placeholder='Votre Budget', required='')
+           input(type='hidden' name='id' value='#{idee.id}')
+           input(type='hidden' name='image_id' value='#{idee.Image.id}')
+       // File Button
+       .form-group
+         label.col-md-4.control-label(for='image_idee') Image idee
+         img(src='/#{idee.Image.url}', alt='', height='80')
+         .col-md-4
+           input#image.input-file(name='image_idee', type='file')
+       // File Button
+       .form-group
+         label.col-md-4.control-label(for='piece') piecejoint
+         .col-md-4
+           input#piece.input-file(name='piece', type='file')
+       // Button (Double)
+       .form-group
+         label.col-md-4.control-label(for='submit')
+         .col-md-8
+           input.btn-success.btn.pull-right(value='Modifier', type='submit')
+           input.btn-default.btn.pull-right(value='Annuler', type='reset')

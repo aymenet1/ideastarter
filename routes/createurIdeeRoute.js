@@ -1,8 +1,8 @@
 var express = require('express');
 var models = require("../models/models.js");
 var fs = require("fs");
-var multer = require('multer')
-var upload = multer({ dest: 'uploads/' })
+var multer = require('multer');
+var upload = multer({ dest: 'uploads/' });
 
 module.exports = (function() {
     'use strict';
@@ -62,6 +62,57 @@ module.exports = (function() {
         })
     });
 
+    createurIdeeRoute.get("/mesidees", function(req, res) {
+        models.Idee.findAll({
+            where: {
+                idUtilisateur: 1
+            },
+            include: [models.Utilisateur, models.Image]
+        }).then(function(mesides) {
+            console.log(mesides);
+            res.render('createuridee/idees', { idUtilisateur: 1, action: "mesides", mesides: mesides });
+        });
+    });
+    createurIdeeRoute.get("/idees", function(req, res) {
+        models.Idee.findAll({ include: [models.Utilisateur, models.Image] }).then(function(idees) {
+            console.log(idees);
+            res.render('createuridee/aidees', { action: "idees", idees: idees });
+        });
+    });
+    createurIdeeRoute.get("/idee", function(req, res) {
+        models.Idee.findAll({
+            where: {
+                id: req.query.id
+            },
+            include: [models.Utilisateur, models.Image, models.Piece, models.Categorie]
+        }).then(function(idee) {
+            //console.log(idee);
+            models.Commentaire.findAll({
+                where: {
+                    idIdee: req.query.id
+                },
+                include: [models.Utilisateur]
+            }).then(function(comments) {
+                models.Commentaire.findAll({
+                    where: {
+                        idIdee: req.query.id
+                    },
+                    include: [models.Utilisateur]
+                }).then(function(repcoments) {
+                    models.RepCommentaire.findAll({
+                        where: {
+                            idIdee: req.query.id
+                        },
+                        include: [models.Utilisateur]
+                    }).then(function(repcomments) {
+
+
+                        res.render('createuridee/showidee', { id: req.query.id, action: "idee", idee: idee, comments: comments, repcomments: repcomments });
+                    });
+                });
+            });
+        });
+    });
 
     //supprimer idée
     createurIdeeRoute.get("/supprimer", function(req, res) {
@@ -149,17 +200,113 @@ module.exports = (function() {
             res.render('createuridee/chercher', { categories: categories });
         });
     });
+
     createurIdeeRoute.get("/monidee", function(req, res) {
         models.Idee.findAll({
-            where: {
-                id: req.query.id
-            },
-            include: [models.Utilisateur, models.Image, models.Piece, models.Categorie]
+            where: { id: req.query.id },
+            include: [models.Utilisateur,
+                models.Image,
+                models.Piece,
+                models.Categorie
+            ]
         }).then(function(monidee) {
-            console.log(monidee);
-            res.render('createuridee/monidee', { id: req.query.id, action: "monidee", monidee: monidee });
+            //console.log(monidee);
+            models.Commentaire.findAll({
+                where: {
+                    idIdee: req.query.id
+                },
+                include: [models.Utilisateur, models.Idee]
+            }).then(function(comments) {
+                models.RepCommentaire.findAll({
+                    where: {
+                        idIdee: req.query.id
+                    },
+                    include: [models.Utilisateur]
+                }).then(function(repcomments) {
+                    res.render('createuridee/monidee', { id: req.query.id, action: "monidee", monidee: monidee, comments: comments, repcomments: repcomments });
+                });
+            });
         });
     });
 
+    createurIdeeRoute.post('/commentid', function(req, res) {
+        var com = models.Commentaire.build();
+        com.message = req.body.comment;
+        // var idt=req.body.idee;
+        var idIdee = req.query.idee;
+        // var idee= models.Idee.findAll({where:{id:idIdee}});
+        console.log(idIdee);
+        com.save().then(function(newcomment) {
+            newcomment.setIdee(idIdee);
+            newcomment.setUtilisateur(1);
+            models.Idee.findAll({
+                where: {
+                    id: idIdee
+                },
+                include: [models.Utilisateur,
+                    models.Image,
+                    models.Piece,
+                    models.Categorie
+                ]
+            }).then(function(idee) {
+                models.Commentaire.findAll({
+                    where: {
+                        idIdee: req.query.idee
+                    },
+                    include: [models.Utilisateur, models.Idee]
+                }).then(function(comments) {
+                    models.RepCommentaire.findAll({
+                        where: {
+                            idIdee: req.query.idee
+                        },
+                        include: [models.Utilisateur]
+                    }).then(function(repcomments) {
+                        res.render('createuridee/showidee', { idee: req.query.id, action: "idee", idee: idee, comments: comments, repcomments: repcomments });
+                    });
+                });
+            });
+        });
+    });
+
+    createurIdeeRoute.post('/repcomment', function(req, res) {
+        var com = models.RepCommentaire.build();
+        com.message = req.body.comment;
+        // var idt=req.body.idee;
+        var idIdee = req.query.idee;
+        var idc = req.query.idc;
+        // var idee= models.Idee.findAll({where:{id:idIdee}});
+        console.log(idc);
+        com.save().then(function(newcomment) {
+            newcomment.setIdee(idIdee);
+            newcomment.setUtilisateur(1);
+            newcomment.setCommentaire(idc);
+            models.Idee.findAll({
+                where: {
+                    id: idIdee
+                },
+                include: [models.Utilisateur,
+                    models.Image,
+                    models.Piece,
+                    models.Categorie
+                ]
+            }).then(function(idee) {
+                models.Commentaire.findAll({
+                    where: {
+                        idIdee: req.query.idee
+                    },
+                    include: [models.Utilisateur, models.Idee]
+                }).then(function(comments) {
+                    models.RepCommentaire.findAll({
+                        where: {
+                            idIdee: req.query.idee
+                        },
+                        include: [models.Utilisateur, models.Idee]
+                    }).then(function(repcomments) {
+                        res.render('createuridee/showidee', { idee: req.query.id, action: "idee", idee: idee, comments: comments, repcomments: repcomments });
+                    });
+                });
+            });
+        });
+    });
     return createurIdeeRoute;
 })();

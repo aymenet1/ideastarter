@@ -1,0 +1,9 @@
+a#modif,a#sup {
+    margin-left: 10px;
+}
+a.reply {
+    float: right;
+}
+/*div#reponse {
+    display: none;
+}*/

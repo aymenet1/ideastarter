@@ -12,12 +12,15 @@ var Idee = sequelize.import(__dirname + "/idee");
 var Piece = sequelize.import(__dirname + "/piece");
 var Image = sequelize.import(__dirname + "/image");
 var Categorie = sequelize.import(__dirname + "/categorie");
-
+var Commentaire = sequelize.import(__dirname + "/commentaire");
+var RepCommentaire = sequelize.import(__dirname + "/Repcommentaire");
 exports.Utilisateur = Utilisateur;
 exports.Idee = Idee;
 exports.Image = Image;
 exports.Piece = Piece;
 exports.Categorie = Categorie;
+exports.Commentaire = Commentaire;
+exports.RepCommentaire = RepCommentaire;
 
 exports.Sync = function() {
     Idee.belongsTo(Utilisateur, {
@@ -56,8 +59,35 @@ exports.Sync = function() {
         }
     });
     // idee.setCategorie()
-
-
-
+Commentaire.belongsTo(Utilisateur, {
+        foreignKey: {
+            allowNull: true,
+            name: 'idUtilisateur'
+        }
+    });
+Commentaire.belongsTo(Idee, {
+        foreignKey: {
+            allowNull: true,
+            name: 'idIdee'
+        }
+    });
+RepCommentaire.belongsTo(Idee, {
+        foreignKey: {
+            allowNull: true,
+            name: 'idIdee'
+        }
+    });
+RepCommentaire.belongsTo(Commentaire, {
+        foreignKey: {
+            allowNull: true,
+            name: 'idCommentaire'
+        }
+    });
+RepCommentaire.belongsTo(Utilisateur, {
+        foreignKey: {
+            allowNull: true,
+            name: 'idUtilisateur'
+        }
+    });
     sequelize.sync({ force: false });
 };
