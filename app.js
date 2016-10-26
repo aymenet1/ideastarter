@@ -9,7 +9,7 @@ app.locals.moment = require('moment');
 
 var createurideeRoute = require("./routes/createurideeRoute.js");
 var createurideePreLoginRoute = require("./routes/createurideePreLoginRoute.js");
-
+var PreLoginRoute = require("./routes/PreLoginRoute.js");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/uploads',express.static(__dirname + '/uploads'));
@@ -21,7 +21,7 @@ app.use('/createuridee/chercher', express.static('public'));
 app.use('/createuridee/chercher/categorie', express.static('public'));
 app.use(morgan('dev'));
 app.use('/api', api);
-
+app.use('/',PreLoginRoute);
 app.use('/', createurideePreLoginRoute);
 app.use('/createuridee', createurideeRoute);
 app.get('/',function(req, res){

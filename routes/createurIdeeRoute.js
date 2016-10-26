@@ -16,18 +16,32 @@ module.exports = (function() {
      });
 
   var cpUpload = upload.fields([{ name: 'image_idee', maxCount: 1 }, { name: 'piece', maxCount: 1 }])
-
-  createurIdeeRoute.post('/creer', cpUpload, function(req, res) {
+createurIdeeRoute.post('/creer', cpUpload, function(req, res) {
         var idee = models.Idee.build();
         idee.nom = req.body.nom;
         idee.description = req.body.description;
         idee.date_depot = req.body.date_depot;
         idee.budget = req.body.budget;
-        models.Categorie.findById(req.body.categorie).then(function(cat) {
+        if (req.body.categorie == 0) {
+            var categorie = models.Categorie.build();
+            categorie.nom = req.body.autre_categorie;
+            categorie.valide = false;
+            categorie.save().then(function(cat) {
+                ajouter_idee(cat);
+            });
+        } else {
+            models.Categorie.findById(req.body.categorie).then(function(cat) {
+                ajouter_idee(cat);
+            });
+        }
+
+        function ajouter_idee(cat) {
             idee.save().then(function(newIdee) {
                 newIdee.setCategorie(cat);
                 fs.readFile(req.files.image_idee[0].path, function(err, data) {
                     var newPath = "uploads/idee/" + req.files.image_idee[0].filename;
+                    var typeimg=req.files.image_idee[0].filetype;
+                    console.log(typeimg);
                     var image = models.Image.build();
                     image.titre = req.body.nom;
                     image.url = newPath;
@@ -61,7 +75,8 @@ module.exports = (function() {
                     });
                 });
             });
-        })
+        }
+
     });
 
   createurIdeeRoute.get("/mesidees",function(req,res){

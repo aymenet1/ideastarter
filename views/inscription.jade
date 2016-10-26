@@ -45,11 +45,11 @@ block prepend head
                 label.col-md-4.control-label(for='domain') Domaine
                 .col-md-6
                     select#domain.form-control(name='domain')
-                        option(value='Informatique') Informatique
-                        option(value='Archiecture') Archiecture
-                        option(value='Autre') Autre
+                      for domain in domains
+                        option(value='#{domain.id}') #{domain.nom}
+                      option(value='Autre') Autre
             // Text input
-            .form-group
+            .form-group#autredomaine
                 label.col-md-4.control-label(for='autre') Autre Domaine
                 .col-md-6
                     input#autre.form-control.input-md(name='autre', type='text', placeholder='Votre domaine')
@@ -113,9 +113,11 @@ block prepend head
         $('#contributeur').hide();
         $('#createur').hide();
         $('#sub').hide();
+        $('#autredomaine').hide();
         $('#selectbasic').change(function(){
              if($('#selectbasic').val()=='createur') {
-                 $('#createur').show(); 
+                 $('#createur').show();
+                 $('#contributeur').hide(); 
                  $('#sub').show();
                 } else if($('#selectbasic').val()=='contributeur') {
                         $('#contributeur').show();
@@ -137,6 +139,12 @@ block prepend head
             $('#createur').hide();}
             $('#sub').hide();
         });
+         $('#domain').change(function(){
+         if($('#domain').val()=='Autre') {
+          $('#autredomaine').show();
+          $('#autre').attr('required','true');
+         }
+         });
     script.
       var password = document.getElementById("password")
       , confirm_password = document.getElementById("passworconfirm");

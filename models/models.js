@@ -6,7 +6,6 @@ var sequelize = new Sequelize(config.database, config.username, config.password,
     dialect: 'mysql',
     port: config.port
 });
-
 var Utilisateur = sequelize.import(__dirname + "/utilisateur");
 var Idee = sequelize.import(__dirname + "/idee");
 var Piece = sequelize.import(__dirname + "/piece");
@@ -14,6 +13,7 @@ var Image = sequelize.import(__dirname + "/image");
 var Categorie = sequelize.import(__dirname + "/categorie");
 var Commentaire = sequelize.import(__dirname + "/commentaire");
 var RepCommentaire = sequelize.import(__dirname + "/Repcommentaire");
+var Domain = sequelize.import(__dirname + "/domain");
 exports.Utilisateur = Utilisateur;
 exports.Idee = Idee;
 exports.Image = Image;
@@ -21,7 +21,7 @@ exports.Piece = Piece;
 exports.Categorie = Categorie;
 exports.Commentaire = Commentaire;
 exports.RepCommentaire = RepCommentaire;
-
+exports.Domain = Domain;
 exports.Sync = function() {
     Idee.belongsTo(Utilisateur, {
         foreignKey: {
@@ -87,6 +87,18 @@ RepCommentaire.belongsTo(Utilisateur, {
         foreignKey: {
             allowNull: true,
             name: 'idUtilisateur'
+        }
+    });
+Domain.hasMany(Utilisateur, {
+        foreignKey: {
+            allowNull: true,
+            name: 'idDomain'
+        }
+    });
+Utilisateur.belongsTo(Domain, {
+        foreignKey: {
+            allowNull: true,
+            name: 'idDomain'
         }
     });
     sequelize.sync({ force: false });
