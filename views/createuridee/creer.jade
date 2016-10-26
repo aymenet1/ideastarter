@@ -11,39 +11,39 @@ block prepend head
       // Textarea
       .form-group
         label.col-md-4.control-label(for='description') Description:
-        .col-md-4
+        .col-md-6
           textarea#description.form-control(name='description') Ecrivez la description de votre idée
       // Select Basic
       .form-group
         label.col-md-4.control-label(for='categorie') Categorie:
-        .col-md-4
+        .col-md-6
           select#Categorie.form-control(name='categorie')
             each categorie in categories
               option(value='#{categorie.id}') #{categorie.nom}
       // Text input
       .form-group
         label.col-md-4.control-label(for='date_depot') Date de déposistion
-        .col-md-4
+        .col-md-6
           input#date_depot.form-control.input-md(name='date_depot', type='date', placeholder='date deposition', required='')
       // Text input
       .form-group
         label.col-md-4.control-label(for='budget') Budget
-        .col-md-4
+        .col-md-6
           input#budget.form-control.input-md(name='budget', type='text', placeholder='Votre Budget', required='')
       // File Button
       .form-group
         label.col-md-4.control-label(for='image_idee') Image idee
-        .col-md-4
+        .col-md-6
           input#image.input-file(name='image_idee', type='file')
       // File Button
       .form-group
         label.col-md-4.control-label(for='piece') piecejoint
-        .col-md-4
+        .col-md-6
           input#piece.input-file(name='piece', type='file')
       // Button (Double)
       .form-group
         label.col-md-4.control-label(for='submit')
-        .col-md-8
+        .col-md-6
           input.btn-success.btn.pull-right(value='Ajouter', type='submit')
           input.btn-default.btn.pull-right(value='Annuler', type='reset')
     append foot
