@@ -1,0 +1,153 @@
+extends layout
+block prepend head
+  form.form-horizontal(method='post',action='/inscription')
+    fieldset
+        // Form Name
+        legend Form Name
+        // Select Basic
+        .form-group
+            label.col-md-4.control-label(for='selectbasic')    Vous ête?
+            .col-md-6
+                select#selectbasic.form-control(name='selectbasic')
+                    option(value='') veuillez choisir un otption
+                    option(value='createur') Créateur
+                    option(value='contributeur') contributeur
+        #createur
+            // Text input
+            .form-group
+                label.col-md-4.control-label(for='nom') Nom
+                .col-md-6
+                    input#Nom.form-control.input-md(name='nom', type='text', placeholder='Votre Nom', required='required')
+            .form-group
+                label.col-md-4.control-label(for='prenom') Prénom
+                .col-md-6
+                    input#prenom.form-control.input-md(name='prenom', type='text', placeholder='Votre Prénom', required='')
+            .form-group
+                label.col-md-4.control-label(for='email') Email
+                .col-md-6
+                    input#Nom.form-control.input-md(name='email', type='email', placeholder='Votre Email', required='required')
+            .form-group
+                label.col-md-4.control-label(for='username') Nom d'utilisateur
+                .col-md-6
+                    input#prenom.form-control.input-md(name='username', type='text', placeholder='Votre nom pseudo', required='')
+            // Password input
+            .form-group
+                label.col-md-4.control-label(for='passworconfirm') Confirmation de mot de passe
+                .col-md-6
+                    input#passworconfirm.form-control.input-md(name='passworconfirm', type='password', placeholder='Confirmer votre Mot de passe', required='')
+            // Password input
+            .form-group
+                label.col-md-4.control-label(for='password') Mot de passe
+                .col-md-6
+                    input#password.form-control.input-md(name='password', type='password', placeholder='votre Mot de passe', required='')
+            // Select Basic
+            .form-group
+                label.col-md-4.control-label(for='domain') Domaine
+                .col-md-6
+                    select#domain.form-control(name='domain')
+                        option(value='Informatique') Informatique
+                        option(value='Archiecture') Archiecture
+                        option(value='Autre') Autre
+            // Text input
+            .form-group
+                label.col-md-4.control-label(for='autre') Autre Domaine
+                .col-md-6
+                    input#autre.form-control.input-md(name='autre', type='text', placeholder='Votre domaine')
+        #contributeur
+            // Text input
+            .form-group
+                label.col-md-4.control-label(for='Entreprise') Nom de l'entreprise 
+                .col-md-6
+                    input#entreprise.form-control.input-md(name='entreprise', type='text', placeholder='Nom de votre entreprise')
+            // Text input
+            .form-group
+                label.col-md-4.control-label(for='date_creation') Date de Création de l'entreprise 
+                .col-md-6
+                    input#date_creation.form-control.input-md(name='date_creation', type='date', placeholder='Date de création de votre entreprise')
+            // Text input
+            .form-group
+                label.col-md-4.control-label(for='adresse') Adresse
+                .col-md-6
+                    input#adresse.form-control.input-md(name='adresse', type='text', placeholder="Adresse de l'entreprise")
+            // Text input
+            .form-group
+                label.col-md-4.control-label(for='ville') Ville
+                .col-md-6
+                    input#ville.form-control.input-md(name='ville', type='text', placeholder='Ville')
+            // Text input
+            .form-group
+                label.col-md-4.control-label(for='pays') Pays
+                .col-md-6
+                    input#pays.form-control.input-md(name='pays', type='text', placeholder='pays')
+            // Text input
+            .form-group
+                label.col-md-4.control-label(for='cp') Code postale
+                .col-md-6
+                    input#cp.form-control.input-md(name='cp', type='text', placeholder='Code postal')
+            // Text input
+            .form-group
+                label.col-md-4.control-label(for='tel') Télephone
+                .col-md-6
+                    input#tel.form-control.input-md(name='tel', type='tel', placeholder='Votre Téléphone')
+            // Text input
+            .form-group
+                label.col-md-4.control-label(for='fax') Faxe
+                .col-md-6
+                    input#fax.form-control.input-md(name='fax', type='tel', placeholder='Votre Fax')
+            // Text input
+            .form-group
+                label.col-md-4.control-label(for='contact') Email de contact
+                .col-md-6
+                    input#contact.form-control.input-md(name='contact', type='email', placeholder='Votre Email de contact')
+            // Text input
+            .form-group
+                label.col-md-4.control-label(for='site') Site Web Url
+                .col-md-6
+                    input#site.form-control.input-md(name='site', type='text', placeholder='Site web')
+    .form-group
+                label.col-md-4.control-label(for='submit')
+                .col-md-8
+                    input.btn-success.btn.pull-right(value='Ajouter', type='submit')
+                    input.btn-default.btn.pull-right(value='Annuler', type='reset')
+    script.
+        $('#contributeur').hide();
+        $('#createur').hide();
+        $('#sub').hide();
+        $('#selectbasic').change(function(){
+             if($('#selectbasic').val()=='createur') {
+                 $('#createur').show(); 
+                 $('#sub').show();
+                } else if($('#selectbasic').val()=='contributeur') {
+                        $('#contributeur').show();
+                         $('#createur').show();
+                         $('#sub').show();
+                         document.getElementById("entreprise").required = true;
+                         document.getElementById("date_creation").required = true;
+                         document.getElementById("adresse").required = true;
+                         document.getElementById("ville").required = true;
+                         document.getElementById("pays").required = true;
+                         document.getElementById("cp").required = true;
+                         document.getElementById("tel").required = true;
+                         document.getElementById("fax").required = true;
+                         document.getElementById("contact").required = true;
+                         document.getElementById("site").required = true;
+                } 
+                 else
+            {$('#contributeur').hide();
+            $('#createur').hide();}
+            $('#sub').hide();
+        });
+    script.
+      var password = document.getElementById("password")
+      , confirm_password = document.getElementById("passworconfirm");
+      function validatePassword(){
+      if(password.value != confirm_password.value) {
+      confirm_password.setCustomValidity("Les deux mots de passe ne sont pas identique");
+      } else {
+      confirm_password.setCustomValidity('');
+      }
+      }
+      password.onchange = validatePassword;
+      confirm_password.onkeyup = validatePassword;
+
+     
