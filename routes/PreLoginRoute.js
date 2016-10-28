@@ -1,6 +1,6 @@
 var express = require('express');
 var models = require("../models/models.js");
-
+var crypto = require('crypto');
 module.exports = (function() {
   'use strict';
   var PreLogin = express.Router(); 
@@ -9,6 +9,27 @@ module.exports = (function() {
               res.render('login');
      });
 
+PreLogin.post('/login', function(req, res) {
+        if (req.body.email!=null&&req.body.password!=null) {
+            models.Utilisateur.findOne({where:{ email: req.body.email}}).then(function(Utilisateur){
+            if(Utilisateur!=null){
+                if(Utilisateur.verifyPassword(req.body.password)==true){
+                        req.session.loggedIn = true;
+                        req.session.Utilisateur = Utilisateur.toJSON();
+                  if(Utilisateur.type=='createur'){
+                        res.redirect('createuridee/mesidees');
+                    }else if(Utilisateur.type=='contributeur'){
+                        res.redirect('createuridee/idees');
+                    }
+                }else{
+                   res.redirect('admin');
+                }
+              }
+            });
+        }else{
+            res.send(JSON.stringify({"status":"failure","cause":"no parameters"}));
+        }
+    });
   PreLogin.get("/inscription",function(req,res){
        models.Domain.findAll().then(function(domains){
         res.render('inscription',{action:"domains",domains:domains});
@@ -22,7 +43,7 @@ module.exports = (function() {
         user.type = req.body.selectbasic;
         user.email = req.body.email;
         user.username =req.body.username;
-        user.password = req.body.password;
+        user.setPassword(req.body.password);
        user.domaine =req.body.domain;
       user.entreprise = req.body.entreprise;
       user.date_creation =req.body.date_creation;
@@ -57,5 +78,35 @@ module.exports = (function() {
               }); });
           }
           });
+  //////////////////////////////////////////////////////////////////
+     PreLogin.get("/admin",function(req,res){
+       models.Utilisateur.findAll({include:[models.Domain]}).then(function(Utilisateurs){
+              res.render('admin/dashboard',{action:"utilisateur",Utilisateurs:Utilisateurs});
+     });});
+
+          PreLogin.get("/user",function(req,res){
+       models.Utilisateur.findOne({where:{
+                 id:req.query.id},include:[models.Domain]}).then(function(Utilisateurs){
+          models.Idee.findAll({where:{
+                 idUtilisateur:req.query.id},include:[models.Categorie]}).then(function(idees){
+                           res.render('admin/user',{action:"utilisateur",Utilisateurs:Utilisateurs,idees,idees});
+     });});});
+
+          PreLogin.get("/deletuser",function(req,res){
+      models.Utilisateur.findAll({include:[models.Domain]}).then(function(Utilisateurs){
+                 models.Utilisateur.destroy({where:{id:req.query.id}}).then(function(){
+                  res.render('admin/dashboard',{action:"Utilisateurs",Utilisateurs:Utilisateurs}); }); 
+                         
+  });
+   });
+           PreLogin.get("/updateuser",function(req,res){
+                  models.Utilisateur.update({
+                Etat: req.query.etat},{where: {id:req.query.id }}).then(function(edituser) {
+              models.Utilisateur.findAll({include:[models.Domain]}).then(function(Utilisateurs){
+                    res.render('admin/dashboard',{action:"Utilisateurs",Utilisateurs:Utilisateurs}); 
+                  }); 
+                         
+     });
+   });
      return PreLogin;
 })();
