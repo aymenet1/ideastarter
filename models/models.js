@@ -14,6 +14,8 @@ var Image = sequelize.import(__dirname + "/image");
 var Categorie = sequelize.import(__dirname + "/categorie");
 var Commentaire = sequelize.import(__dirname + "/commentaire");
 var RepCommentaire = sequelize.import(__dirname + "/Repcommentaire");
+var Rating = sequelize.import(__dirname + "/rating");
+
 exports.Utilisateur = Utilisateur;
 exports.Idee = Idee;
 exports.Image = Image;
@@ -21,6 +23,7 @@ exports.Piece = Piece;
 exports.Categorie = Categorie;
 exports.Commentaire = Commentaire;
 exports.RepCommentaire = RepCommentaire;
+exports.Rating = Rating;
 
 exports.Sync = function() {
     Idee.belongsTo(Utilisateur, {
@@ -59,35 +62,53 @@ exports.Sync = function() {
         }
     });
     // idee.setCategorie()
-Commentaire.belongsTo(Utilisateur, {
+    Commentaire.belongsTo(Utilisateur, {
         foreignKey: {
             allowNull: true,
             name: 'idUtilisateur'
         }
     });
-Commentaire.belongsTo(Idee, {
+    Commentaire.belongsTo(Idee, {
         foreignKey: {
             allowNull: true,
             name: 'idIdee'
         }
     });
-RepCommentaire.belongsTo(Idee, {
+    RepCommentaire.belongsTo(Idee, {
         foreignKey: {
             allowNull: true,
             name: 'idIdee'
         }
     });
-RepCommentaire.belongsTo(Commentaire, {
+    RepCommentaire.belongsTo(Commentaire, {
         foreignKey: {
             allowNull: true,
             name: 'idCommentaire'
         }
     });
-RepCommentaire.belongsTo(Utilisateur, {
+    RepCommentaire.belongsTo(Utilisateur, {
         foreignKey: {
             allowNull: true,
             name: 'idUtilisateur'
         }
     });
+
+    Rating.belongsTo(Idee, {
+        foreignKey: {
+            allowNull: true,
+            name: 'idIdee'
+        }
+    });
+    // idee.setIdee()
+    
+    Rating.belongsTo(Utilisateur, {
+        foreignKey: {
+            allowNull: true,
+            name: 'idUtilisateur'
+        }
+    });
+    // idee.setUtilisateur()
+
+
     sequelize.sync({ force: false });
 };

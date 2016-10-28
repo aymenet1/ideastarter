@@ -237,7 +237,9 @@ module.exports = (function() {
                     },
                     include: [models.Utilisateur]
                 }).then(function(repcomments) {
-                    res.render('createuridee/monidee', { id: req.query.id, action: "monidee", monidee: monidee, comments: comments, repcomments: repcomments });
+                    models.Categorie.findAll().then(function(categories) {
+                        res.render('createuridee/monidee', { id: req.query.id, action: "monidee", monidee: monidee, categories: categories, comments: comments, repcomments: repcomments });
+                    });
                 });
             });
         });
@@ -322,5 +324,17 @@ module.exports = (function() {
             });
         });
     });
+    createurIdeeRoute.post('/evaluer/:idIdee',function(req,res){
+        console.log(req.body,req.params.idIdee);
+        // models.Idee.findById(req.params.idIdee).then(function(idee){
+        //     var rating = models.Rating.build();
+        //     rating.note = req.body.note;
+        //     rating.save().then(function(r){
+        //         idee.setRating(r).then(function(data){
+        //             console.log(data);
+        //         })    
+        //     })
+        // })
+    })
     return createurIdeeRoute;
 })();

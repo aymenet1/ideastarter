@@ -41,7 +41,9 @@ block prepend head
       // Blog Comments
       // Comments Form
       .well
-        h4 laisser un commentaire:
+        h4 Evaluer cette Idee:
+        input#note.rating.form-control(type='number', min='0', max='5', step='0.5', data-size='sm',required,data-idIdee="#{idee.id}")
+        h4 Laisser un commentaire:
         form(method='post',action='/createuridee/commentid?idee=#{idee.id}')
           .form-group
             textarea.form-control(rows='3', name='comment')
@@ -101,28 +103,31 @@ block prepend head
         // /.input-group
       // Blog Categories Well
       .well
-        h4 Blog Categories
+        h4 Categories
         .row
           .col-lg-6
             ul.list-unstyled
+            each categorie in categories
               li
-                a(href='#') Category Name
-              li
-                a(href='#') Category Name
-              li
-                a(href='#') Category Name
-              li
-                a(href='#') Category Name
-          .col-lg-6
-            ul.list-unstyled
-              li
-                a(href='#') Category Name
-              li
-                a(href='#') Category Name
-              li
-                a(href='#') Category Name
-              li
-                a(href='#') Category Name
+                a(href='/createuridee/chercher/categorie/#{categorie.id}') #{categorie.nom}
+              //li
+                //a(href='#') Category Name
+              //li
+                //a(href='#') Category Name
+              //li
+                //a(href='#') Category Name
+              //li
+                //a(href='#') Category Name
+          //.col-lg-6
+            //ul.list-unstyled
+              //li
+                //a(href='#') Category Name
+              //li
+                //a(href='#') Category Name
+              //li
+                //a(href='#') Category Name
+              //li
+                //a(href='#') Category Name
         // /.row
       // Side Widget Well
       .well
@@ -131,5 +136,23 @@ block prepend head
           | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, perspiciatis adipisci accusamus laudantium odit aliquam repellat tempore quos aspernatur vero.
   // /.row
   hr
-
-  
+  append foot
+    script.
+      $(document).ready(function(){
+        $('#note').rating('create', {
+        disabled: false, 
+        showClear: false, 
+        showCaption: false
+        })
+        $('#note').on('rating.change', function(event, value, caption) {
+          console.log(value);
+            $.ajax({
+              url:'/createuridee/evaluer/'+$(this).attr("data-idIdee"),
+              type:'post',
+              data:'note='+value,
+              success:function(res){
+                console.log(res);
+              }
+            })
+          });
+       })    
