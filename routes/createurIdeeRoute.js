@@ -130,6 +130,7 @@ module.exports = (function() {
         });
     });
 
+    
     createurIdeeRoute.post("/chercher", function(req,res){
         if(typeof(req.body.idCategorie)=="undefined"){
             models.Idee.findAll({
@@ -159,10 +160,16 @@ module.exports = (function() {
         }
     })
 
+    
+
     createurIdeeRoute.get("/chercher", function(req, res) {
         models.Categorie.findAll().then(function(categories) {
             res.render('createuridee/chercher', { categories: categories });
         });
+    });        
+
+    createurIdeeRoute.post("/enrichir/:idIdee", function(req,res){
+        console.log(req.body,req.params.idIdee);
     });
 
     return createurIdeeRoute;

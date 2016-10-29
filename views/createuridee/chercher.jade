@@ -12,19 +12,20 @@ block prepend head
           h2
             a(href='#') #{idee.nom}
           p.lead
-            | par 
+            | par  
             a(href='index.php') #{idee.Utilisateur.prenom} #{idee.Utilisateur.nom}
           p
             span.glyphicon.glyphicon-time
             |  ajout&eacute; le #{moment(idee.date_depot).format('MM/DD/YYYY')}
           hr
           img.img-responsive.img-hover(src='/#{idee.Image.url}', alt='')
-          hr
           p #{idee.description}
-          a.btn.btn-primary(href='#')
-            | Details
-            span.glyphicon.glyphicon-chevron-right
           hr
+          a
+            input.btn.btn-primary.pull-right.enrichir(value='Enrichir',data-idIdee="#{idee.id}")
+          a
+            input.btn.btn-primary.pull-left(value='lire la suite')
+          hr(style="clear:both;")
           // Pager
       ul.pager
         li.previous
@@ -73,3 +74,40 @@ block prepend head
           h4 #{categorie.nom}
           p #{categorie.description}
       -}
+      #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel')
+        .modal-dialog(role='document')
+          .modal-content
+            .modal-header
+              button.close(type='button', data-dismiss='modal', aria-label='Close')
+                span(aria-hidden='true') ×
+              h4#exampleModalLabel.modal-title Ajouter des informations
+            .modal-body
+              form
+                .form-group
+                  label.control-label(for='message-text') Message:
+                  textarea#message-text.form-control
+            .modal-footer
+              button.btn.btn-default(type='button', data-dismiss='modal') Close
+              input#sendenrich.btn.btn-default(type='submit' value="Send")
+      append foot
+        script.
+          $(document).ready(function(){
+             $(".enrichir").on("click",function(){
+              $("#sendenrich").attr("data-ididee",$(this).attr("data-ididee"));
+              $('#myModal').modal('show');
+            })
+            $("#sendenrich").on("click",function(){
+              $.ajax({
+                url: '/createuridee/enrichir/'+$("#sendenrich").attr("data-ididee"),
+                data: 'message='+$("#message-text").val(),
+                type: 'post',
+                success:function(res){
+                  var res = JSON.parse(res);
+                  if(res.status=="success"){
+                  
+                  }
+                }
+              })
+            });
+          })
+         

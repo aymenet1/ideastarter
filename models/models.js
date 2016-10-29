@@ -58,6 +58,20 @@ exports.Sync = function() {
     // idee.setCategorie()
 
 
+    Idee.belongsTo(Enrichir, {
+        foreignKey: {
+            allowNull: true,
+            name: 'idIdee'
+        }
+    });
+
+    Utilisateur.belongsTo(Enrichir, {
+        foreignKey: {
+            allowNull: true,
+            name: 'idUtilisateur'
+        }
+    });
+
 
     sequelize.sync({ force: false });
 };
