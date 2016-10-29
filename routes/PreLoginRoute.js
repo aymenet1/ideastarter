@@ -16,13 +16,14 @@ PreLogin.post('/login', function(req, res) {
                 if(Utilisateur.verifyPassword(req.body.password)==true){
                         req.session.loggedIn = true;
                         req.session.Utilisateur = Utilisateur.toJSON();
+                      console.log(Utilisateur.type);
                   if(Utilisateur.type=='createur'){
                         res.redirect('createuridee/mesidees');
                     }else if(Utilisateur.type=='contributeur'){
                         res.redirect('createuridee/idees');
-                    }
-                }else{
-                   res.redirect('admin');
+                    }else if(Utilisateur.type=='contributeur') {
+                   res.redirect('admin/admin');
+                }
                 }
               }
             });
@@ -78,35 +79,6 @@ PreLogin.post('/login', function(req, res) {
               }); });
           }
           });
-  //////////////////////////////////////////////////////////////////
-     PreLogin.get("/admin",function(req,res){
-       models.Utilisateur.findAll({include:[models.Domain]}).then(function(Utilisateurs){
-              res.render('admin/dashboard',{action:"utilisateur",Utilisateurs:Utilisateurs});
-     });});
-
-          PreLogin.get("/user",function(req,res){
-       models.Utilisateur.findOne({where:{
-                 id:req.query.id},include:[models.Domain]}).then(function(Utilisateurs){
-          models.Idee.findAll({where:{
-                 idUtilisateur:req.query.id},include:[models.Categorie]}).then(function(idees){
-                           res.render('admin/user',{action:"utilisateur",Utilisateurs:Utilisateurs,idees,idees});
-     });});});
-
-          PreLogin.get("/deletuser",function(req,res){
-      models.Utilisateur.findAll({include:[models.Domain]}).then(function(Utilisateurs){
-                 models.Utilisateur.destroy({where:{id:req.query.id}}).then(function(){
-                  res.render('admin/dashboard',{action:"Utilisateurs",Utilisateurs:Utilisateurs}); }); 
-                         
-  });
-   });
-           PreLogin.get("/updateuser",function(req,res){
-                  models.Utilisateur.update({
-                Etat: req.query.etat},{where: {id:req.query.id }}).then(function(edituser) {
-              models.Utilisateur.findAll({include:[models.Domain]}).then(function(Utilisateurs){
-                    res.render('admin/dashboard',{action:"Utilisateurs",Utilisateurs:Utilisateurs}); 
-                  }); 
-                         
-     });
-   });
+  
      return PreLogin;
 })();

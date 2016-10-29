@@ -54,6 +54,7 @@ block prepend head
     append foot
       script.
         tinymce.init({ selector:'textarea' });
+        $("#autre_categorie").attr("required","false");
         if($("#Categorie").val()=="0"){
           $("#autre_categorie_form").show();
           $("#autre_categorie").attr("required","true");

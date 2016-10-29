@@ -1,0 +1,30 @@
+extends layout
+block prepend head
+    form.form-horizontal(method='post',action='/createuridee/contacter',enctype="multipart/form-data")
+        // Form Name
+        legend Contacter un Utilisateur
+        // Text input
+        .form-group
+            label.col-md-4.control-label(for='objet') Objet:
+            .col-md-4
+                input#Nom.form-control.input-md(name='objet', type='text', placeholder='Objet' , required='')
+        // Textarea
+        .form-group
+            label.col-md-4.control-label(for='description') Description:
+            .col-md-4
+                textarea#description.form-control(name='description' , placeholder='Ecrivez la description', required='')
+        // Select Basic
+
+        .form-group
+            label.col-md-4.control-label(for='piece') Piecejoint
+            .col-md-4
+                input#piece.input-file(name='piece', type='file')
+        // Button (Double)
+        .form-group
+            label.col-md-4.control-label(for='submit')
+            .col-md-2
+                input.btn-success.btn.pull-right(value='Envoyer', type='submit')
+                input.btn-default.btn.pull-right(value='Annuler', type='reset')
+append foot
+    script.
+        tinymce.init({ selector:'textarea' });

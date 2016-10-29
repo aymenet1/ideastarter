@@ -14,6 +14,7 @@ var Categorie = sequelize.import(__dirname + "/categorie");
 var Commentaire = sequelize.import(__dirname + "/commentaire");
 var RepCommentaire = sequelize.import(__dirname + "/Repcommentaire");
 var Domain = sequelize.import(__dirname + "/domain");
+var Rating = sequelize.import(__dirname + "/rating");
 exports.Utilisateur = Utilisateur;
 exports.Idee = Idee;
 exports.Image = Image;
@@ -22,6 +23,7 @@ exports.Categorie = Categorie;
 exports.Commentaire = Commentaire;
 exports.RepCommentaire = RepCommentaire;
 exports.Domain = Domain;
+exports.Rating = Rating;
 exports.Sync = function() {
     Idee.belongsTo(Utilisateur, {
         foreignKey: {
@@ -101,5 +103,20 @@ Utilisateur.belongsTo(Domain, {
             name: 'idDomain'
         }
     });
+Rating.belongsTo(Idee, {
+        foreignKey: {
+            allowNull: true,
+            name: 'idIdee'
+        }
+    });
+    // idee.setIdee()
+    
+    Rating.belongsTo(Utilisateur, {
+        foreignKey: {
+            allowNull: true,
+            name: 'idUtilisateur'
+        }
+    });
+    // idee.setUtilisateur()
     sequelize.sync({ force: false });
 };

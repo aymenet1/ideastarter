@@ -30,6 +30,7 @@ module.exports = function(sequelize, DataTypes) {
       //console.log("password_hash:"+this.password_hash);
     },
     verifyPassword:function(pass) {
+      console.log(bcrypt.compareSync(pass,this.password))
       return bcrypt.compareSync(pass,this.password);
     }
     ,

@@ -41,6 +41,8 @@ block prepend head
       // Blog Comments
       // Comments Form
       .well
+        h4 Evaluer cette Idee:
+        input#note.rating.form-control(type='number', min='0', max='5', step='0.5', data-size='sm',required,data-idIdee="#{idee.id}")
         h4 laisser un commentaire:
         form(method='post',action='/createuridee/commentid?idee=#{ide.id}')
           .form-group
@@ -132,5 +134,23 @@ block prepend head
           | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, perspiciatis adipisci accusamus laudantium odit aliquam repellat tempore quos aspernatur vero.
   // /.row
   hr
+  append foot
+     script.
+      $(document).ready(function(){
+        $('#note').rating('create', {
+        disabled: false, 
+        showClear: false, 
+        showCaption: false
+        })
+        $('#note').on('rating.change', function(event, value, caption) {
+          console.log(value);
+            $.ajax({
+              url:'/createuridee/evaluer/'+$(this).attr("data-idIdee"),
+              type:'post',
+              data:'note='+value,
+              success:function(res){
+                console.log(res);
+              }
+            })
 
   

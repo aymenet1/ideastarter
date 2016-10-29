@@ -204,7 +204,7 @@ html(lang='en')
                       i.fa.fa-search
                 // /input-group
               li
-                a(href='')
+                a(href='admin/admin')
                   i.fa.fa-dashboard.fa-fw
                   |  Utilisateur
           // /.sidebar-collapse
@@ -250,13 +250,13 @@ html(lang='en')
                                br
                                case utilisateur.Etat
                                  when "Active"
-                                   a.dropdown-item(href='/updateuser?id=#{utilisateur.id}&etat=Bloque') Bloquer
+                                   a.dropdown-item(href='admin/updateuser?id=#{utilisateur.id}&etat=Bloque') Bloquer
                                  when "En attente"
-                                   a.dropdown-item(href='/updateuser?id=#{utilisateur.id}&etat=Active') Active
+                                   a.dropdown-item(href='admin/updateuser?id=#{utilisateur.id}&etat=Active') Active
                                    br
-                                   a.dropdown-item(href='/updateuser?id=#{utilisateur.id}&etat=Bloque') Bloquer
+                                   a.dropdown-item(href='admin/updateuser?id=#{utilisateur.id}&etat=Bloque') Bloquer
                                  when "Bloque"
-                                   a.dropdown-item(href='/updateuser?id=#{utilisateur.id}&etat=Active') Activer
+                                   a.dropdown-item(href='admin/updateuser?id=#{utilisateur.id}&etat=Active') Activer
                                  default
                                    a.dropdown-item(href='#') ne rien faire
                 // /.table-responsive

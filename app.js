@@ -1,16 +1,18 @@
 var express = require('express');
+var session = require('express-session')
 var http = require('http');
 var app = express();
 var bodyParser = require('body-parser');
 var morgan      = require('morgan');
 var models = require("./models/models.js");
 var api = require("./routes/api.js");
+var cookieParser = require('cookie-parser')
 app.locals.moment = require('moment');
 var createurideeRoute = require("./routes/createurideeRoute.js");
 var createurideePreLoginRoute = require("./routes/createurideePreLoginRoute.js");
 var PreLoginRoute = require("./routes/PreLoginRoute.js");
 var adminRoute = require("./routes/adminRoute.js");
-
+app.use(session({secret: '1234567890QWERTY'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 

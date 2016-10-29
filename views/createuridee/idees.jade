@@ -30,7 +30,7 @@ block prepend head
               a(href='#') #{idee.Utilisateur.nom}
             p
               | #{idee.description}
-            a.btn.btn-primary(href='/createuridee/monidee?id=#{idee.id}')
+            a.btn.btn-primary(href='/createuridee/monidee?idee=#{idee.id}')
               | afficher
               i.fa.fa-angle-right
             a.btn.btn-primary#modif(href='/createuridee/modifier?id=#{idee.id}')
